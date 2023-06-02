@@ -45,7 +45,7 @@ def make_an_order(store_class):
         if order_item[0] == "" or order_item[1] == "":
             break
         order_list.append(order_item)
-        print("Product added to list!\n")
+        print("Product added to shopping list!\n")
 
     if order_list:
         total_cost = store_class.order(order_list)
