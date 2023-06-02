@@ -94,4 +94,5 @@ def test_store_order_errors():
                      (product_list[-1], 2)]
     assert best_buy.order(shopping_list) == 18750
 
+
 pytest.main()

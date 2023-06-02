@@ -1,8 +1,8 @@
 import pytest
 from products import Product, NonStockedProduct, LimitedProduct
+from promotions import SecondHalfPrice, ThirdOneFree, PercentDiscount
 
 
-# Using the library pytest, create the following tests (Remember - each test should have it’s own function):
 # Test that creating a normal product works.
 def test_product_init_creation():
     product_instance = Product(name="Test product", price=150, quantity=50)
@@ -13,7 +13,7 @@ def test_product_init_creation():
     assert product_instance.active is True
 
 
-# Test that creating a product with invalid details (empty name, negative price) invokes an exception.
+# Test that creating a product with invalid details
 def test_product_init_empty_name():
     with pytest.raises(ValueError):
         Product(name="", price=150, quantity=50)
@@ -36,7 +36,7 @@ def test_product_quantity_0():
     assert product_instance.active is False
 
 
-# Test that product purchase modifies the quantity and returns the right output.
+# Test product purchase modifies quantity and returns the right output
 def test_product_buy_method():
     product_instance = Product(name="Test product", price=150, quantity=50)
     product_instance.buy(5)
@@ -84,6 +84,29 @@ def test_limited_wrong_type_max_per_order():
     with pytest.raises(ValueError):
         LimitedProduct(name="Shipping", price=50, quantity=100,
                        maximum="Unlimited")
+
+
+# Test promotion with each product
+def test_product_second_half_off():
+    product_instance = Product(name="Test product", price=150, quantity=50)
+    second_half_off = SecondHalfPrice("Second")
+    product_instance.set_promotion(second_half_off)
+    assert product_instance.buy(10) == 1125
+
+
+def test_non_stock_third_free():
+    non_stock_inst = NonStockedProduct(name="Digital product", price=100)
+    third_free = ThirdOneFree("Third")
+    non_stock_inst.set_promotion(third_free)
+    assert non_stock_inst.buy(500) == 33400
+
+
+def test_limited_percent_discount():
+    limited_inst = LimitedProduct(name="Shipping", price=50, quantity=100,
+                                  maximum=2)
+    percent_discount = PercentDiscount("Last", 40)
+    limited_inst.set_promotion(percent_discount)
+    assert limited_inst.buy(2) == 60
 
 
 pytest.main()
